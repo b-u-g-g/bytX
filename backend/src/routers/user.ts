@@ -1,7 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
-import { authMiddleware } from "../middleware";
+//import { authMiddleware } from "../middleware";
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post'
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
 
@@ -11,7 +11,7 @@ const prismaClient = new PrismaClient();
 const JWT_SECRET= "bytx123"
 
 
-router.get("/presignedUrl", authMiddleware, async (req, res) => {
+/*router.get("/presignedUrl", authMiddleware, async (req, res) => {
     
     const userId = req.userId;
 
@@ -38,4 +38,4 @@ router.post("/signin", async(req, res) => {
 
 });
 
-export default router;
+export default router;*/
