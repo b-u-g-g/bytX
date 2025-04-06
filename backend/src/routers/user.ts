@@ -21,8 +21,28 @@ prismaClient.$transaction(
       timeout: 10000, 
     }
 )
-// router.get("/task", authMiddleware, async (req, res) => {
-// })
+router.get("/task", authMiddleware, async (req, res) => {
+    // @ts-ignore
+    const taskId: string = req.query.taskId;
+    // @ts-ignore
+    const userId: string = req.userId;
+
+    const taskDetails = await prismaClient.task.findFirst({
+        where: {
+            user_id: Number(userId),
+            id: Number(taskId)
+        },
+        include: {
+            options: true
+        }
+    })
+
+    if (!taskDetails) {
+        return res.status(411).json({
+            message: "You dont have access to this task"
+        })
+    }
+ })
 
 const s3Client = new S3Client({
     credentials: {
