@@ -1,4 +1,4 @@
-/*import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { JWT_SECRET, WORKER_JWT_SECRET } from "./config";
 import jwt from "jsonwebtoken";
 
@@ -47,4 +47,3 @@ export function workerMiddleware(req: Request, res: Response, next: NextFunction
         })
     }
 }
-*/
