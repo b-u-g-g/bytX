@@ -21,7 +21,7 @@ prismaClient.$transaction(
       timeout: 10000, 
     }
 )
-router.get("/task", authMiddleware, async (req, res) => {
+/*router.get("/task", authMiddleware, async (req, res) => {
     // @ts-ignore
     const taskId: string = req.query.taskId;
     // @ts-ignore
@@ -43,7 +43,7 @@ router.get("/task", authMiddleware, async (req, res) => {
         })
     }
  })
-
+*/
 const s3Client = new S3Client({
     credentials: {
         accessKeyId: process.env.ACCESS_KEY_ID ?? "",
