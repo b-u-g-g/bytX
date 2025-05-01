@@ -12,12 +12,14 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
   id            Int     @id @default(autoincrement())
   address       String  @unique
   tasks         Task[]
   payouts       Payouts[]
 }
+
 model Worker {
   id                  Int     @id @default(autoincrement())
   address             String  @unique

@@ -11,6 +11,7 @@
     "jsonwebtoken": "^9.0.2",
     "prisma": "^6.4.1",
     "s3-client": "^4.4.2",
+    "tweetnacl": "^1.0.3",
     "zod": "^3.24.2"
   }
 }
