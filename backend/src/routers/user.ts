@@ -5,9 +5,10 @@ import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3
 import jwt from "jsonwebtoken";
 import { JWT_SECRET, TOTAL_DECIMALS } from "../config";
 import { authMiddleware } from "../middleware";
+import { workerMiddleware } from "../middleware";
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post'
 import { createTaskInput } from "../types";
-import { Connection, PublicKey, Transaction } from "@solana/web3.js";
+//import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 
 
 const router = Router();
