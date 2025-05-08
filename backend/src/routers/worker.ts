@@ -9,7 +9,7 @@ import { createSubmissionInput } from "../types";
 import { Connection, Keypair, PublicKey, SystemProgram, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
 import { privateKey } from "../privateKey";
 //import { decode } from "bs58";
-import decode from 'bs58';
+import { RequestHandler } from 'express';
 import bs58 from 'bs58';
 
 const connection = new Connection(process.env.RPC_URL ?? "");
@@ -111,7 +111,8 @@ const keypair = Keypair.fromSecretKey(bs58.decode(privateKey));
 
 })
 
-router.get("/balance", workerMiddleware, async (req, res) => {
+  
+/*router.get("/balance", workerMiddleware, async (req, res) => {
     // @ts-ignore
     const userId: string = req.userId;
 
@@ -126,7 +127,7 @@ router.get("/balance", workerMiddleware, async (req, res) => {
         lockedAmount: worker?.pending_amount,
     })
 })
-
+*/
 
 router.post("/submission", workerMiddleware, async (req, res) => {
     // @ts-ignore
@@ -185,6 +186,7 @@ router.post("/submission", workerMiddleware, async (req, res) => {
 })
 
 
+
 router.get("/nextTask", workerMiddleware, async (req, res) => {
     // @ts-ignore
     const userId: string = req.userId;
@@ -201,6 +203,22 @@ router.get("/nextTask", workerMiddleware, async (req, res) => {
         })
     }
 })
+router.get("/nextTask", workerMiddleware, async (req, res): Promise<void> => {
+    // @ts-ignore
+    const userId: string = req.userId;
+
+    const task = await getNextTask(Number(userId));
+
+    if (!task) {
+        res.status(411).json({   
+            message: "No more tasks left for you to review"
+        });
+    } else {
+        res.json({   
+            task
+        });
+    }
+});
 router.post("/signin", async (req, res): Promise<void> => {
     const { publicKey, signature } = req.body;
     const message = new TextEncoder().encode("Sign into mechanical turks as a worker");
