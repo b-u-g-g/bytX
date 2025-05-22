@@ -8,9 +8,8 @@ import { getNextTask } from "../db";
 import { createSubmissionInput } from "../types";
 import { Connection, Keypair, PublicKey, SystemProgram, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
 import { privateKey } from "../privateKey";
-//import { decode } from "bs58";
-import { RequestHandler } from 'express';
-import bs58 from 'bs58';
+import decode from "bs58"; 
+import bs58 from "bs58";
 
 const connection = new Connection(process.env.RPC_URL ?? "");
 
@@ -55,9 +54,7 @@ router.post("/payout", workerMiddleware, async (req, res) => {
     console.log(worker.address);
 
     //const keypair = Keypair.fromSecretKey(decode(privateKey));
-    
-const keypair = Keypair.fromSecretKey(bs58.decode(privateKey));
-
+    const keypair = Keypair.fromSecretKey(bs58.decode(privateKey));
     // TODO: There's a double spending problem here
     // The user can request the withdrawal multiple times
     // Can u figure out a way to fix it?
@@ -111,8 +108,7 @@ const keypair = Keypair.fromSecretKey(bs58.decode(privateKey));
 
 })
 
-  
-/*router.get("/balance", workerMiddleware, async (req, res) => {
+router.get("/balance", workerMiddleware, async (req, res) => {
     // @ts-ignore
     const userId: string = req.userId;
 
@@ -127,7 +123,7 @@ const keypair = Keypair.fromSecretKey(bs58.decode(privateKey));
         lockedAmount: worker?.pending_amount,
     })
 })
-*/
+
 
 router.post("/submission", workerMiddleware, async (req, res) => {
     // @ts-ignore
@@ -185,8 +181,6 @@ router.post("/submission", workerMiddleware, async (req, res) => {
 
 })
 
-
-
 router.get("/nextTask", workerMiddleware, async (req, res) => {
     // @ts-ignore
     const userId: string = req.userId;
@@ -204,52 +198,7 @@ router.get("/nextTask", workerMiddleware, async (req, res) => {
     }
 })
 
-
-router.post("/signin", async (req, res): Promise<void> => {
-    const { publicKey, signature } = req.body;
-    const message = new TextEncoder().encode("Sign into mechanical turks as a worker");
-
-    const result = nacl.sign.detached.verify(
-        message,
-        new Uint8Array(signature.data),
-        new PublicKey(publicKey).toBytes(),
-    );
-
-    if (!result) {
-        res.status(411).json({ message: "Incorrect signature" });
-        return;
-    }
-
-    const existingUser = await prismaClient.worker.findFirst({
-        where: { address: publicKey }
-    });
-
-    if (existingUser) {
-        const token = jwt.sign({ userId: existingUser.id }, WORKER_JWT_SECRET);
-
-        res.json({
-            token,
-            amount: existingUser.pending_amount / TOTAL_DECIMALS
-        });
-    } else {
-        const user = await prismaClient.worker.create({
-            data: {
-                address: publicKey,
-                pending_amount: 0,
-                locked_amount: 0
-            }
-        });
-
-        const token = jwt.sign({ userId: user.id }, WORKER_JWT_SECRET);
-
-        res.json({
-            token,
-            amount: 0
-        });
-    }
-});
-
-/*router.post("/signin", async(req, res) => {
+router.post("/signin", async(req, res) => {
     const { publicKey, signature } = req.body;
     const message = new TextEncoder().encode("Sign into mechanical turks as a worker");
 
@@ -298,6 +247,6 @@ router.post("/signin", async (req, res): Promise<void> => {
             amount: 0
         })
     }
-});*/
+});
 
 export default router;
