@@ -203,22 +203,8 @@ router.get("/nextTask", workerMiddleware, async (req, res) => {
         })
     }
 })
-router.get("/nextTask", workerMiddleware, async (req, res): Promise<void> => {
-    // @ts-ignore
-    const userId: string = req.userId;
 
-    const task = await getNextTask(Number(userId));
 
-    if (!task) {
-        res.status(411).json({   
-            message: "No more tasks left for you to review"
-        });
-    } else {
-        res.json({   
-            task
-        });
-    }
-});
 router.post("/signin", async (req, res): Promise<void> => {
     const { publicKey, signature } = req.body;
     const message = new TextEncoder().encode("Sign into mechanical turks as a worker");
