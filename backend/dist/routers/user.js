@@ -33,7 +33,6 @@ const s3Client = new client_s3_1.S3Client({
     },
     region: "us-east-1"
 });
-
 const router = (0, express_1.Router)();
 const prismaClient = new client_1.PrismaClient();
 prismaClient.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
